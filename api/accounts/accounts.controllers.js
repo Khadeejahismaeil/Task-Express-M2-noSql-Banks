@@ -1,4 +1,4 @@
-const Account = require('../../models/Account'); 
+const Account = require("../../models/Account");
 
 //create a new acc
 exports.accountCreate = async (req, res) => {
@@ -19,7 +19,7 @@ exports.accountDelete = async (req, res) => {
       await foundAccount.deleteOne();
       res.status(204).end();
     } else {
-      res.status(404).json({ message: 'Account not found' });
+      res.status(404).json({ message: "Account not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -35,7 +35,7 @@ exports.accountUpdate = async (req, res) => {
       await foundAccount.updateOne(req.body);
       res.status(204).end();
     } else {
-      res.status(404).json({ message: 'Account not found' });
+      res.status(404).json({ message: "Account not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -45,7 +45,7 @@ exports.accountUpdate = async (req, res) => {
 //get all acc
 exports.accountsGet = async (req, res) => {
   try {
-    const accounts = await Account.find().select('-createdAt -updatedAt'); // Excludes timestamps
+    const accounts = await Account.find().select("-createdAt -updatedAt"); // Excludes timestamps
     res.json(accounts);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -58,15 +58,18 @@ exports.getAccountByUsername = async (req, res) => {
     const { username } = req.params;
     const foundAccount = await Account.findOne({ username });
     if (foundAccount) {
-      if (req.query.currency === 'usd') {
+      if (req.query.currency === "usd") {
         //convert funds to USD if currency query parameter is provided
-        const accountInUsd = { ...foundAccount.toObject(), funds: foundAccount.funds * 3.31 };
+        const accountInUsd = {
+          ...foundAccount.toObject(),
+          funds: foundAccount.funds * 3.31,
+        };
         res.status(200).json(accountInUsd);
       } else {
         res.status(200).json(foundAccount);
       }
     } else {
-      res.status(404).json({ message: 'Account not found' });
+      res.status(404).json({ message: "Account not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
